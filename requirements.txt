@@ -1,3 +1,3 @@
-import pickle
+import pickle5
 import streamlit as st
 import requests
