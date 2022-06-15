@@ -1,3 +1,2 @@
-pickle==pickle 5.0.0.12
 import streamlit as st
 import requests
