@@ -1,2 +1,2 @@
-import streamlit as st
-import requests
+streamlit==1.10.0
+requests==2.28.0
