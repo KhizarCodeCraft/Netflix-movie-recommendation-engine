@@ -1,8 +1,6 @@
-from os import link
 import pickle
 import streamlit as st
 import requests
-import streamlit.components.v1 as components
 
 
 st.set_page_config(
@@ -41,10 +39,24 @@ def recommend(movie):
 
     return recommended_movie_names,recommended_movie_posters,recommended_movie_url,recommended_movie_vote_average,recommended_movie_vote_count,recommended_movie_release_date
 
+def top_rated_movie():
+    index = new_movies[new_movies['vote_average'] >= 8.1]
+    movie_names = []
+    movie_posters = []
+    movie_vote_average = []
+    movie_release_date=[]
+    for i in range(6):
+        movie_names.append(index.iloc[i].title)
+        movie_posters.append(fetch_poster(index.iloc[i].movie_id))
+        movie_vote_average.append(index.iloc[i].vote_average)
+        movie_release_date.append(index.iloc[i].release_date.split('-')[0])
+       
+    return movie_names,movie_posters,movie_vote_average,movie_release_date
 
 st.title('Netflix Movie Recommendation Engine')
 movies = pickle.load(open('./movie_list.pkl','rb'))
 similarity = pickle.load(open('./similarity.pkl','rb'))
+new_movies = pickle.load(open('./new_movies.pkl','rb'))
 
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
@@ -60,7 +72,7 @@ if st.button('Show Relatecd Movie'):
         st.image(recommended_movie_posters[0])
         st.subheader(recommended_movie_names[0])
         # with st.expander:
-        st.text("Rel Year: {}".format(recommended_movie_release_date[0]))
+        st.text("Release Year: {}".format(recommended_movie_release_date[0]))
         st.write("Visit official link {}".format(recommended_movie_url[0]))
         
         st.caption("Average Vote : {}".format(recommended_movie_vote_average[0]))
@@ -68,7 +80,7 @@ if st.button('Show Relatecd Movie'):
     with col2:
         st.image(recommended_movie_posters[1])
         st.subheader(recommended_movie_names[1])
-        st.text("Rel Year: {}".format(recommended_movie_release_date[1]))
+        st.text("Release Year: {}".format(recommended_movie_release_date[1]))
         st.write("Visit official link {}".format(recommended_movie_url[1]))
         st.caption("Average Vote : {}".format(recommended_movie_vote_average[1]))
         st.caption("Total Vote : {}".format(recommended_movie_vote_count[1]))
@@ -76,7 +88,7 @@ if st.button('Show Relatecd Movie'):
     with col3:
         st.image(recommended_movie_posters[2])
         st.subheader(recommended_movie_names[2])
-        st.text("Rel Year: {}".format(recommended_movie_release_date[2]))
+        st.text("Release Year: {}".format(recommended_movie_release_date[2]))
         st.write("Visit official link {}".format(recommended_movie_url[2]))
         st.caption("Average Vote : {}".format(recommended_movie_vote_average[2]))
         st.caption("Total Vote : {}".format(recommended_movie_vote_count[2]))
@@ -84,7 +96,7 @@ if st.button('Show Relatecd Movie'):
     with col4:
         st.image(recommended_movie_posters[3])
         st.subheader(recommended_movie_names[3])
-        st.text("Rel Year: {}".format(recommended_movie_release_date[3]))
+        st.text("Release Year: {}".format(recommended_movie_release_date[3]))
         st.write("Visit official link {}".format(recommended_movie_url[3]))
         st.caption("Average Vote : {}".format(recommended_movie_vote_average[3]))
         st.caption("Total Vote : {}".format(recommended_movie_vote_count[3]))
@@ -92,10 +104,43 @@ if st.button('Show Relatecd Movie'):
     with col5:
         st.image(recommended_movie_posters[4])
         st.subheader(recommended_movie_names[4])
-        st.text("Rel Year: {}".format(recommended_movie_release_date[4]))
+        st.text("Release Year: {}".format(recommended_movie_release_date[4]))
         st.write("Visit official link {}".format(recommended_movie_url[4]))
         st.caption("Average Vote : {}".format(recommended_movie_vote_average[4]))
         st.caption("Total Vote : {}".format(recommended_movie_vote_count[4]))
+
+
+
+st.header('Top Rted Movie')
+movie_names,movie_posters,movie_vote_average,movie_release_date = top_rated_movie()
+col1, col2, col3, col4, col5 =st.columns(5)
+
+with col1:
+    st.image(movie_posters[0])
+    st.subheader(movie_names[0])
+    st.caption("Average Vote : {}".format(movie_vote_average[0]))
+    st.text("Release Year: {}".format(movie_release_date[0]))
+with col2:
+    st.image(movie_posters[1])
+    st.subheader(movie_names[1])
+    st.caption("Average Vote : {}".format(movie_vote_average[1]))
+    st.text("Release Year: {}".format(movie_release_date[1]))
+with col3:
+    st.image(movie_posters[2])
+    st.subheader(movie_names[2])
+    st.caption("Average Vote : {}".format(movie_vote_average[2]))
+    st.text("Release Year: {}".format(movie_release_date[2]))
+with col4:
+    st.image(movie_posters[3])
+    st.subheader(movie_names[3])
+    st.caption("Average Vote : {}".format(movie_vote_average[3]))
+    st.text("Release Year: {}".format(movie_release_date[3]))
+
+with col5:
+    st.image(movie_posters[4])
+    st.subheader(movie_names[4])
+    st.caption("Average Vote : {}".format(movie_vote_average[4]))
+    st.text("Release Year: {}".format(movie_release_date[4]))
 
 
 
